@@ -35,33 +35,7 @@ io.on('connection', function(socket){
    }
 
    // console.log(users.length, users);
-   socket.on('disconnect', function(){
-
-      console.log('user disconnected', socket.id );
-
-
-      displayMessage = users[ socket.id ].username + " salió."
-
-
-      delete users[socket.id]
-
-      var userData = getUsers()
-
-      io.emit('user gone', {
-         message: displayMessage,
-         data: userData
-      });
-
-      // notificar numéro de usuarios restantes
-      // contando los índices en el Obj. de 'users'
-
-      console.log(
-         "todavía quedan "
-         + Object.keys(users).length
-         + " usuarios"
-      )
-
-   });
+   socket.on('disconnect', userDisconnect );
 
 
    socket.on('chat message', function(msg){
@@ -137,3 +111,37 @@ function getUsers() {
 http.listen(3003, function () {
       console.log('CHATSNAP listening on port 3003!');
 });
+
+
+
+
+
+
+
+function userDisconnect(){
+
+   console.log('user disconnected', socket.id );
+
+
+   displayMessage = users[ socket.id ].username + " salió."
+
+
+   delete users[socket.id]
+
+   var userData = getUsers()
+
+   io.emit('user gone', {
+      message: displayMessage,
+      data: userData
+   });
+
+   // notificar numéro de usuarios restantes
+   // contando los índices en el Obj. de 'users'
+
+   console.log(
+      "todavía quedan "
+      + Object.keys(users).length
+      + " usuarios"
+   )
+
+}
